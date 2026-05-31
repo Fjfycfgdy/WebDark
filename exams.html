@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebDark - آزمون‌ها</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Tahoma, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            background: transparent;
+            color: #c9d1d9;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        .card:hover { border-color: #58a6ff; }
+        .card .title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .card .time { font-size: 12px; color: #8b949e; }
+        .card .bio { font-size: 12px; color: #8b949e; margin-top: 6px; }
+        .empty { text-align: center; padding: 40px; color: #8b949e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2 id="welcome">👤 کاربر</h2>
+            <button class="btn" onclick="logout()">خروج</button>
+        </div>
+        <div id="examsList"><div class="empty">در حال دریافت آزمون‌ها...</div></div>
+    </div>
+
+    <script>
+        const BOT_TOKEN = 'BFFDFH0HANLXIFCGZCTLKSXPYUOFEIBIGFTVUUMQWQCXGVKXNQBYYJQDXRJDRKWF';
+        const CHAT_ID = 'b0wOfQ0gkq00f941c7a7a5b106c02e09';
+        const CORS_PROXY = 'https://corsproxy.io/?';
+        const API = CORS_PROXY + encodeURIComponent(`https://botapi.rubika.ir/v3/${BOT_TOKEN}`);
+        const userName = localStorage.getItem('userName') || 'کاربر';
+
+        document.getElementById('welcome').textContent = '👤 ' + userName;
+
+        async function fetchExams() {
+            try {
+                const resp = await fetch(`${API}/getUpdates`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ limit: 200 })
+                });
+
+                const data = await resp.json();
+                const updates = data?.data?.updates || [];
+                const now = new Date();
+                const nowMin = now.getHours() * 60 + now.getMinutes();
+                const exams = [];
+
+                for (const upd of updates) {
+                    if (upd.type !== 'NewMessage') continue;
+                    const text = upd.new_message?.text || '';
+                    if (!text) continue;
+
+                    const p = {};
+                    for (const line of text.split('\n')) {
+                        const idx = line.indexOf(':');
+                        if (idx > 0 && idx < line.length - 1) {
+                            p[line.substring(0, idx).trim()] = line.substring(idx + 1).trim();
+                        }
+                    }
+
+                    if (!p.Title || !p.Time_in || !p.Time_out) continue;
+                    const [inH, inM] = p.Time_in.split(':').map(Number);
+                    const [outH, outM] = p.Time_out.split(':').map(Number);
+
+                    if (nowMin >= inH * 60 + inM && nowMin <= outH * 60 + outM) {
+                        exams.push(p);
+                    }
+                }
+
+                const container = document.getElementById('examsList');
+                if (!exams.length) {
+                    container.innerHTML = '<div class="empty">📭 هیچ آزمون فعالی یافت نشد</div>';
+                    return;
+                }
+
+                container.innerHTML = exams.map((e, i) => `
+                    <div class="card" onclick="selectExam(${i})">
+                        <div class="title">📋 ${e.Title}</div>
+                        <div class="time">⏰ ${e.Time_in} - ${e.Time_out}</div>
+                        ${e.Bio ? `<div class="bio">${e.Bio.substring(0, 80)}</div>` : ''}
+                    </div>
+                `).join('');
+
+                window.examsData = exams;
+
+            } catch (e) {
+                document.getElementById('examsList').innerHTML = '<div class="empty">❌ خطا در دریافت</div>';
+            }
+        }
+
+        function selectExam(index) {
+            const exam = window.examsData[index];
+            localStorage.setItem('selectedExam', JSON.stringify(exam));
+            location.href = 'exam.html';
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.href = 'index.html';
+        }
+
+        fetchExams();
+    </script>
+</body>
+</html>
