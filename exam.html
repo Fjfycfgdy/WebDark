@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebDark - آزمون</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Tahoma, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        .timer {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #3fb950;
+            padding: 10px;
+            background: #161b22;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .timer.warning { color: #d2991d; }
+        .timer.danger { color: #f85149; }
+        .image-box {
+            width: 100%;
+            min-height: 200px;
+            background: #161b22;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 48px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .opt-btn {
+            padding: 16px;
+            background: #161b22;
+            border: 2px solid #30363d;
+            border-radius: 12px;
+            color: #c9d1d9;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+        .opt-btn.selected { background: #3fb950; border-color: #3fb950; color: white; }
+        .nav-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .nav-row button {
+            flex: 1;
+            padding: 10px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #c9d1d9;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .nav-row input {
+            width: 50px;
+            padding: 10px;
+            text-align: center;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #c9d1d9;
+            font-size: 13px;
+        }
+        .end-btn {
+            width: 100%;
+            padding: 14px;
+            background: #f85149;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timer" id="timer">00:00:00</div>
+        <div class="image-box" id="imageBox">📄</div>
+        <div class="options" id="optionsGrid">
+            <button class="opt-btn" onclick="selectOption(1)">۱</button>
+            <button class="opt-btn" onclick="selectOption(2)">۲</button>
+            <button class="opt-btn" onclick="selectOption(3)">۳</button>
+            <button class="opt-btn" onclick="selectOption(4)">۴</button>
+        </div>
+        <div class="nav-row">
+            <button onclick="prevQuestion()">◀ قبل</button>
+            <input type="number" id="questionNum" value="1" min="1" onchange="goToQuestion()">
+            <button onclick="nextQuestion()">بعد ▶</button>
+        </div>
+        <button class="end-btn" onclick="endExam()">🏁 اتمام آزمون و ارسال نتایج</button>
+    </div>
+
+    <script>
+        const BOT_TOKEN = 'BFCHJD0POFVQIIJDILERIHMVGXFZIWZRMTQFEZQFNTXECLTHUDEDPGEPJKMZHDKP';
+        const CORS_PROXY = 'https://corsproxy.io/?';
+        const API = CORS_PROXY + encodeURIComponent(`https://botapi.rubika.ir/v3/${BOT_TOKEN}`);
+        const exam = JSON.parse(localStorage.getItem('selectedExam') || '{}');
+        const userName = localStorage.getItem('userName') || 'کاربر';
+
+        let currentQuestion = 1;
+        let totalQuestions = 10;
+        let timeRemaining = 3600;
+        let timerInterval = null;
+        let examFinished = false;
+        let userAnswers = [];
+
+        function startTimer() {
+            updateTimer();
+            timerInterval = setInterval(() => {
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    autoSubmit();
+                    return;
+                }
+                timeRemaining--;
+                updateTimer();
+            }, 1000);
+        }
+
+        function updateTimer() {
+            const h = Math.floor(timeRemaining / 3600);
+            const m = Math.floor((timeRemaining % 3600) / 60);
+            const s = timeRemaining % 60;
+            const el = document.getElementById('timer');
+            el.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            el.className = 'timer' + (timeRemaining < 300 ? ' danger' : timeRemaining < 600 ? ' warning' : '');
+        }
+
+        function selectOption(opt) {
+            if (examFinished) return;
+            userAnswers[currentQuestion - 1] = String(opt);
+            updateOptions();
+        }
+
+        function updateOptions() {
+            const selected = userAnswers[currentQuestion - 1] || '';
+            document.querySelectorAll('.opt-btn').forEach((btn, i) => {
+                btn.classList.toggle('selected', String(i + 1) === selected);
+            });
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 1) { currentQuestion--; updateUI(); }
+            else alert('این اولین سوال است');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) { currentQuestion++; updateUI(); }
+            else alert('این آخرین سوال است');
+        }
+
+        function goToQuestion() {
+            const n = parseInt(document.getElementById('questionNum').value);
+            if (n >= 1 && n <= totalQuestions) { currentQuestion = n; updateUI(); }
+        }
+
+        function updateUI() {
+            document.getElementById('questionNum').value = currentQuestion;
+            updateOptions();
+        }
+
+        function autoSubmit() {
+            examFinished = true;
+            clearInterval(timerInterval);
+            document.getElementById('timer').textContent = '00:00:00';
+            alert('⏰ زمان تمام شد!');
+            calculateResults();
+        }
+
+        function endExam() {
+            if (!confirm('آیا مطمئن هستید که می‌خواهید آزمون را پایان دهید؟')) return;
+            examFinished = true;
+            clearInterval(timerInterval);
+            calculateResults();
+        }
+
+        function calculateResults() {
+            let correct = 0, wrong = 0, unanswered = 0;
+            for (let i = 0; i < totalQuestions; i++) {
+                const ans = userAnswers[i] || '';
+                if (!ans) unanswered++;
+                else correct++;
+            }
+            const pct = totalQuestions > 0 ? (correct / totalQuestions * 100).toFixed(1) : 0;
+
+            const msg = `👤 نام کاربر: ${userName}\n📋 نام آزمون: ${exam.Title || 'آزمون'}\n\n✅ درست: ${correct}\n❌ غلط: ${wrong}\n⏭ نزده: ${unanswered}\n📝 کل: ${totalQuestions}\n\n📈 درصد: ${pct}%`;
+
+            alert(msg);
+            sendToBot(msg);
+            document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+        }
+
+        async function sendToBot(text) {
+            try {
+                const resp = await fetch(`${API}/getUpdates`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ limit: 1 })
+                });
+                const data = await resp.json();
+                const chatId = data?.data?.updates?.[0]?.chat_id;
+                if (!chatId) return;
+
+                await fetch(`${API}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: text })
+                });
+            } catch (e) {}
+        }
+
+        // Long press delete
+        document.querySelectorAll('.opt-btn').forEach((btn, i) => {
+            let timer;
+            btn.addEventListener('mousedown', () => timer = setTimeout(() => deleteOption(i+1), 800));
+            btn.addEventListener('mouseup', () => clearTimeout(timer));
+            btn.addEventListener('touchstart', () => timer = setTimeout(() => deleteOption(i+1), 800));
+            btn.addEventListener('touchend', () => clearTimeout(timer));
+        });
+
+        function deleteOption(opt) {
+            if (examFinished) return;
+            if (userAnswers[currentQuestion-1] === String(opt)) {
+                userAnswers[currentQuestion-1] = '';
+                updateOptions();
+            }
+        }
+
+        // Start
+        userAnswers = new Array(totalQuestions).fill('');
+        startTimer();
+        updateUI();
+    </script>
+</body>
+</html>
