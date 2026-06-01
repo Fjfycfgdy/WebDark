@@ -12,18 +12,18 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#0a0f1f">
     
-    <!-- Open Graph / Social Media -->
+    <!-- Open Graph -->
     <meta property="og:title" content="WebDark Persian | سامانه هوشمند مدرسه">
     <meta property="og:description" content="پلتفرم جامع مدیریت مدرسه، آزمون آنلاین، و پرتال دانش‌آموزی">
     <meta property="og:type" content="website">
     <meta property="og:image" content="webdark-logo.png">
     <meta property="og:locale" content="fa_IR">
     
-    <!-- Favicon (WebDark Logo PNG) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="webdark-logo.png">
     <link rel="apple-touch-icon" href="webdark-logo.png">
     
-    <!-- PWA Manifest -->
+    <!-- PWA -->
     <link rel="manifest" href="data:application/json,{'name':'WebDark','short_name':'WebDark','start_url':'/','display':'standalone','background_color':'%230a0f1f','theme_color':'%230a0f1f','icons':[{'src':'webdark-logo.png','sizes':'192x192','type':'image/png'}]}">
     
     <!-- Font -->
@@ -38,10 +38,7 @@
             --text-secondary: #a3b5e6;
             --accent: #5f8aff;
             --accent2: #9147ff;
-            --success: #3fb950;
             --radius-xl: 2rem;
-            --radius-lg: 1.5rem;
-            --radius-md: 1rem;
             --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1.2);
         }
 
@@ -59,24 +56,18 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ========== ANIMATED BACKGROUND ========== */
         #particles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* ========== LOADER ========== */
         .loader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: var(--bg-deep);
             z-index: 9999;
             display: flex;
@@ -88,13 +79,11 @@
         }
         .loader.hidden { opacity: 0; visibility: hidden; }
         .loader img {
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             animation: pulse 2s infinite;
         }
         .loader-ring {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             border: 3px solid rgba(255,255,255,0.1);
             border-top-color: var(--accent);
             border-radius: 50%;
@@ -106,7 +95,6 @@
             50% { transform: scale(1.05); opacity: 0.8; }
         }
 
-        /* ========== LAYOUT ========== */
         .container {
             max-width: 1300px;
             margin: 0 auto;
@@ -115,35 +103,22 @@
             z-index: 2;
         }
 
-        /* ========== BRAND ========== */
         .brand {
             text-align: center;
             margin-bottom: 2.5rem;
             animation: fadeInDown 0.8s ease;
         }
-        .brand-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-        .brand-logos img {
-            height: 60px;
+        .brand-logo {
+            display: block;
+            margin: 0 auto 1rem;
+            height: 70px;
             width: auto;
-            filter: drop-shadow(0 0 15px rgba(100,150,255,0.4));
+            filter: drop-shadow(0 0 20px rgba(100,150,255,0.5));
             transition: var(--transition);
         }
-        .brand-logos img:hover {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 25px rgba(100,150,255,0.7));
-        }
-        .brand-logos .divider {
-            width: 2px;
-            height: 50px;
-            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
-            border-radius: 1px;
+        .brand-logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 30px rgba(100,150,255,0.8));
         }
         .logo-text {
             font-size: 3rem;
@@ -174,7 +149,6 @@
             padding-top: 0.6rem;
         }
 
-        /* ========== HERO ========== */
         .hero {
             text-align: center;
             margin-bottom: 3rem;
@@ -210,7 +184,6 @@
             color: #bbd9ff;
         }
 
-        /* ========== FEATURES ========== */
         .features {
             display: flex;
             flex-wrap: wrap;
@@ -236,10 +209,8 @@
         .feature-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.4s;
@@ -253,7 +224,6 @@
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
-            display: inline-block;
             animation: float 3s ease-in-out infinite;
         }
         .feature-card:nth-child(2) .feature-icon { animation-delay: 0.5s; }
@@ -262,15 +232,9 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-        .feature-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.6rem;
-            font-weight: 700;
-            color: #c6dcff;
-        }
+        .feature-card h3 { font-size: 1.4rem; margin-bottom: 0.6rem; font-weight: 700; color: #c6dcff; }
         .feature-card p { font-size: 0.95rem; color: #b9ceff; }
 
-        /* ========== DESCRIPTION ========== */
         .description-section {
             background: linear-gradient(145deg, rgba(10,20,45,0.8), rgba(0,0,0,0.7));
             border-radius: var(--radius-xl);
@@ -293,13 +257,12 @@
         .description-text p { font-size: 1.05rem; text-align: justify; }
         .quote-comparison {
             background: #0e1a2f;
-            border-radius: var(--radius-lg);
+            border-radius: 1.5rem;
             padding: 1.2rem 1.8rem;
             margin-top: 1rem;
             border-right: 4px solid var(--accent);
         }
 
-        /* ========== BUTTON ========== */
         .btn-wrapper {
             text-align: center;
             margin: 3rem 0 2rem;
@@ -325,18 +288,13 @@
         .btn-site::after {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
             background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
             transform: rotate(45deg);
             animation: shine 3s infinite;
         }
-        @keyframes shine {
-            0% { left: -50%; }
-            100% { left: 150%; }
-        }
+        @keyframes shine { 0% { left: -50%; } 100% { left: 150%; } }
         @keyframes btnPulse {
             0%, 100% { box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5), 0 0 0 0 rgba(95,138,255,0.5); }
             50% { box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5), 0 0 0 15px rgba(95,138,255,0); }
@@ -347,10 +305,8 @@
             box-shadow: 0 25px 40px -15px rgba(0,0,0,0.7);
             border-color: #b0c6ff;
         }
-        .btn-site:active { transform: scale(0.97); }
         .btn-hint { margin-top: 1rem; font-size: 0.85rem; opacity: 0.8; color: var(--text-secondary); }
 
-        /* ========== FOOTER ========== */
         .footer {
             text-align: center;
             margin-top: 4rem;
@@ -358,17 +314,20 @@
             border-top: 1px solid #1f2f4e;
             font-size: 0.85rem;
             color: #7c8eb0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
         .footer img {
-            height: 30px;
+            height: 35px;
             width: auto;
-            margin: 0.5rem;
             opacity: 0.7;
             transition: opacity 0.3s;
         }
         .footer img:hover { opacity: 1; }
 
-        /* ========== ANIMATIONS ========== */
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -378,7 +337,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .container { padding: 1.2rem; }
             .hero h1 { font-size: 1.8rem; }
@@ -388,14 +346,7 @@
             .description-section h2 { font-size: 1.4rem; }
             .logo-text { font-size: 2rem; }
             .features { gap: 1.5rem; }
-            .brand-logos img { height: 45px; }
-        }
-        @media (max-width: 480px) {
-            .hero-desc { font-size: 0.85rem; padding: 0.7rem 1rem; }
-            .description-text p { font-size: 0.9rem; }
-            .feature-card { padding: 1.5rem 1rem; }
-            .brand-logos { gap: 1rem; }
-            .brand-logos img { height: 35px; }
+            .brand-logo { height: 55px; }
         }
     </style>
 </head>
@@ -407,17 +358,13 @@
         <div class="loader-ring"></div>
     </div>
 
-    <!-- ========== PARTICLES BACKGROUND ========== -->
+    <!-- ========== PARTICLES ========== -->
     <canvas id="particles"></canvas>
 
-    <!-- ========== MAIN CONTENT ========== -->
+    <!-- ========== MAIN ========== -->
     <div class="container">
         <div class="brand">
-            <div class="brand-logos">
-                <img src="webdark-logo.png" alt="WebDark Logo" title="WebDark">
-                <div class="divider"></div>
-                <img src="oraxel-logo.jpg" alt="Oraxel Company" title="Oraxel" style="border-radius: 15px;">
-            </div>
+            <img src="webdark-logo.png" alt="WebDark Logo" class="brand-logo">
             <div class="logo-text">WebDark <span>|</span> Persian</div>
             <div class="tagline">سامانه هوشمند مدیریت مدرسه • آموزش و فناوری در کنار هم</div>
         </div>
@@ -425,7 +372,7 @@
         <div class="hero">
             <h1>ساخت سایت حرفه‌ای مدرسه</h1>
             <div class="hero-desc">
-                🏫 <span class="highlight">وب‌دارک مخصوص مدارس</span> — پلتفرمی کامل مانند <span class="highlight">وبلایت (Weblite)</span> اما ویژه مدیریت آموزشی، کلاس‌های آنلاین و ارتباط اولیا و مربیان
+                🏫 <span class="highlight">وب‌دارک مخصوص مدارس</span> — پلتفرمی کامل مانند <span class="highlight">وبلایت (Weblite)</span>
             </div>
         </div>
 
@@ -433,35 +380,28 @@
             <div class="feature-card">
                 <div class="feature-icon">📚</div>
                 <h3>مدیریت کلاس‌ها</h3>
-                <p>برنامه هفتگی، نمرات، حضور و غیاب هوشمند و کارنامه آنلاین</p>
+                <p>نمرات، حضور و غیاب و کارنامه آنلاین</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">👨‍🏫</div>
                 <h3>شبکه معلمان و والدین</h3>
-                <p>ارسال پیام، گزارش پیشرفت، جلسات آنلاین اولیا و مربیان</p>
+                <p>گزارش پیشرفت و جلسات آنلاین</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🌐</div>
                 <h3>سایت اختصاصی مدرسه</h3>
-                <p>قالب‌های زیبا، اطلاعیه‌ها، گالری تصاویر، سیستم خودکار</p>
+                <p>قالب‌های زیبا و سیستم خودکار</p>
             </div>
         </div>
 
         <div class="description-section">
-            <h2>🎓 سیستم آموزشی WebDark مخصوص مدارس</h2>
+            <h2>🎓 سیستم آموزشی WebDark</h2>
             <div class="description-text">
-                <p>
-                    <span class="highlight">وب‌دارک (WebDark)</span> یک راهکار جامع و حرفه‌ای برای <strong>ساخت وب‌سایت مدرسه</strong> و مدیریت یکپارچه فرآیندهای آموزشی است.
-                </p>
-                <p>
-                    📌 امکانات: <strong>نمره‌دهی پیشرفته، ثبت نام آنلاین، انجمن اولیا، کتابخانه دیجیتال، آزمون‌ساز،</strong> و پنل اختصاصی.
-                </p>
+                <p><span class="highlight">وب‌دارک (WebDark)</span> راهکاری جامع برای <strong>ساخت وب‌سایت مدرسه</strong> و مدیریت یکپارچه فرآیندهای آموزشی.</p>
+                <p>📌 <strong>نمره‌دهی پیشرفته، ثبت نام آنلاین، کتابخانه دیجیتال، آزمون‌ساز،</strong> و پنل اختصاصی.</p>
                 <div class="quote-comparison">
-                    💡 <strong>مقایسه با وبلایت:</strong> WebDark با تمرکز بر <strong>مدیریت مدرسه، سایت اختصاصی، و پرتال دانش‌آموزی</strong>، یک پلتفرم تمام‌عیار است.
+                    💡 <strong>مقایسه با وبلایت:</strong> WebDark با تمرکز بر <strong>مدیریت مدرسه</strong>، پلتفرمی تمام‌عیار است.
                 </div>
-                <p>
-                    🎯 با <span class="highlight">وب‌دارک</span> سایت مدرسه خود را بسازید.
-                </p>
             </div>
         </div>
 
@@ -469,26 +409,22 @@
             <a href="https://survey.porsline.ir/s/JXGp7stV" class="btn-site" target="_blank" rel="noopener noreferrer">
                 🏫 ساخت سایت مدرسه 🏫
             </a>
-            <p class="btn-hint">با کلیک روی دکمه، فرم درخواست راه‌اندازی سایت حرفه‌ای مدرسه خود را تکمیل کنید</p>
+            <p class="btn-hint">فرم درخواست راه‌اندازی سایت حرفه‌ای مدرسه</p>
         </div>
 
         <div class="footer">
-            <img src="webdark-logo.png" alt="WebDark" title="WebDark">
-            <img src="oraxel-logo.jpg" alt="Oraxel" title="Oraxel" style="border-radius: 8px;">
-            <p style="margin-top:0.8rem;">© ۲۰۲۶ WebDark Persian — Oraxel © | سیستم هوشمند مدیریت مدرسه</p>
+            <img src="webdark-logo.png" alt="WebDark">
+            <img src="oraxel-logo.jpg" alt="Oraxel" style="border-radius:8px;">
+            <span>© ۲۰۲۶ WebDark Persian — Oraxel ©</span>
         </div>
     </div>
 
-    <!-- ========== SCRIPTS ========== -->
+    <!-- ========== PARTICLES JS ========== -->
     <script>
-        // ====== LOADER ======
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 800);
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 800);
         });
 
-        // ====== PARTICLES ======
         const canvas = document.getElementById('particles');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -526,19 +462,15 @@
             }
         }
 
-        for (let i = 0; i < 60; i++) {
-            particles.push(new Particle());
-        }
+        for (let i = 0; i < 60; i++) particles.push(new Particle());
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    
                     if (dist < 120) {
                         ctx.beginPath();
                         ctx.moveTo(particles[i].x, particles[i].y);
@@ -549,15 +481,10 @@
                     }
                 }
             }
-            
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
         animate();
     </script>
 </body>
-</html>
+    </html>
